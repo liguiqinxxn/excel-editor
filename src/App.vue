@@ -10,6 +10,7 @@ import { RouterView } from 'vue-router'
 
 <style scoped>
 .app {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 </style>

@@ -239,58 +239,65 @@ const handleKeyDown = (event: KeyboardEvent) => {
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .table-wrapper {
   flex: 1;
   overflow: auto;
-  border: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .excel-table {
   border-collapse: collapse;
   width: 100%;
-  min-width: 800px;
-  font-family: 'Courier New', monospace;
+  min-width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 14px;
+  background: white;
 }
 
 .excel-table th,
 .excel-table td {
   border: 1px solid #e0e0e0;
-  padding: 2px 4px;
-  min-width: 80px;
+  padding: 6px 8px;
+  min-width: 100px;
   max-width: 200px;
-  height: 24px;
+  height: 32px;
   box-sizing: border-box;
+  text-align: left;
 }
 
 .corner-cell {
-  background: #f5f5f5;
-  border-right: 2px solid #ccc;
-  border-bottom: 2px solid #ccc;
+  background: #f8f9fa;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
   min-width: 40px;
+  border-top-left-radius: 8px;
 }
 
 .row-header {
-  background: #f5f5f5;
-  font-weight: bold;
+  background: #f8f9fa;
+  font-weight: 500;
   text-align: center;
-  border-right: 2px solid #ccc;
+  border-right: 1px solid #e0e0e0;
   min-width: 40px;
 }
 
 .excel-table th:not(.corner-cell) {
   background: #f8f9fa;
-  font-weight: 600;
+  font-weight: 500;
   text-align: center;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 1px solid #e0e0e0;
   cursor: pointer;
   user-select: none;
+  transition: background 0.2s;
 }
 
 .excel-table th:not(.corner-cell):hover {
-  background: #e9ecef;
+  background: #e0e0e0;
 }
 
 .cell {
@@ -298,15 +305,17 @@ const handleKeyDown = (event: KeyboardEvent) => {
   cursor: cell;
   position: relative;
   overflow: hidden;
+  transition: background 0.2s;
 }
 
 .cell:hover {
-  background: #f8f9fa;
+  background: #f0f7ff;
 }
 
 .cell.selected {
   background: #e3f2fd;
   border: 2px solid #1976d2;
+  border-radius: 2px;
 }
 
 .cell.editing {
@@ -321,6 +330,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding: 2px 0;
 }
 
 .cell-editor {
@@ -347,9 +357,11 @@ const handleKeyDown = (event: KeyboardEvent) => {
 .scroll-bars {
   display: flex;
   height: 16px;
-  background: #f5f5f5;
-  border: 1px solid #ddd;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
   border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .horizontal-scroll {
@@ -369,16 +381,16 @@ const handleKeyDown = (event: KeyboardEvent) => {
   top: 6px;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 6px;
   background: #e0e0e0;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 .vertical-scroll .scroll-track {
   top: 0;
   left: 6px;
   bottom: 0;
-  width: 4px;
+  width: 6px;
   height: auto;
 }
 
@@ -386,11 +398,13 @@ const handleKeyDown = (event: KeyboardEvent) => {
   position: absolute;
   height: 100%;
   background: #999;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 .scroll-thumb:hover {
   background: #666;
+  opacity: 0.9;
 }
 </style>

@@ -6,14 +6,14 @@
         @click="handleUndo"
         title="撤销 (Ctrl+Z)"
       >
-        <el-icon><RefreshLeft /></el-icon> 撤销
+        <el-icon class="toolbar-icon"><RefreshLeft /></el-icon> 撤销
       </el-button>
       <el-button 
         :disabled="!canRedo" 
         @click="handleRedo"
         title="重做 (Ctrl+Y)"
       >
-        <el-icon><RefreshRight /></el-icon> 重做
+        <el-icon class="toolbar-icon"><RefreshRight /></el-icon> 重做
       </el-button>
     </el-button-group>
     
@@ -72,22 +72,64 @@ watch(() => excelStore.activeWorksheet?.data, (newData, oldData) => {
 .history-toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 8px;
-  background: #f5f7fa;
-  border-bottom: 1px solid #e4e7ed;
+  gap: 6px;
+  padding: 3px 10px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 32px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.history-toolbar::-webkit-scrollbar {
+  height: 2px;
+}
+
+.history-toolbar::-webkit-scrollbar-thumb {
+  background: #c0c4cc;
+  border-radius: 1px;
+}
+
+.toolbar-icon {
+  width: 12px;
+  height: 12px;
+  font-size: 12px;
 }
 
 .history-info {
   display: flex;
-  gap: 12px;
-  font-size: 12px;
-  color: #909399;
+  gap: 6px;
+  font-size: 11px;
+  color: #666666;
+  white-space: nowrap;
+  margin-left: auto;
 }
 
 .history-info span {
   padding: 2px 6px;
-  background: #fff;
+  background: #ffffff;
   border-radius: 3px;
+  border: 1px solid #d0d0d0;
+  font-weight: 500;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.el-button-group {
+  display: flex;
+  gap: 2px;
+}
+
+.el-button {
+  padding: 2px 6px;
+  font-size: 10px;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  transition: all 0.15s;
+}
+
+.el-button:hover:not(.is-disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 </style>

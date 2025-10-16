@@ -84,7 +84,7 @@
           <span class="sheet-name">{{ worksheet.name }}</span>
           <span v-if="hasWorksheetChanges(index)" class="modified-indicator">●</span>
           <button 
-            v-if="currentFile!.worksheets.length > 1"
+            v-if="currentFile && currentFile.worksheets.length > 1"
             @click.stop="deleteWorksheet(index)"
             class="delete-sheet"
             title="删除工作表"
@@ -337,6 +337,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   background: #f8f9fa;
+  overflow: hidden;
 }
 
 .error-message {
@@ -355,27 +356,30 @@ onUnmounted(() => {
   justify-content: center;
   background: white;
   margin: 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
 .empty-content {
   text-align: center;
   max-width: 400px;
-  padding: 40px;
+  padding: 48px 40px;
 }
 
 .empty-content h3 {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 12px;
-  font-weight: 600;
+  font-size: 28px;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
 }
 
 .empty-content p {
   color: #666;
-  margin-bottom: 24px;
-  line-height: 1.5;
+  margin-bottom: 32px;
+  line-height: 1.6;
+  font-size: 15px;
 }
 
 .empty-actions {
@@ -386,46 +390,53 @@ onUnmounted(() => {
 }
 
 .primary-button {
-  padding: 12px 24px;
+  padding: 14px 28px;
   background: #1976d2;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.primary-button:hover {
-  background: #1565c0;
-}
-
-.secondary-button {
-  padding: 12px 24px;
-  background: white;
-  color: #1976d2;
-  border: 1px solid #1976d2;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 8px;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+}
+
+.primary-button:hover {
+  background: #1565c0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+}
+
+.secondary-button {
+  padding: 14px 28px;
+  background: white;
+  color: #1976d2;
+  border: 1px solid #1976d2;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .secondary-button:hover {
-  background: #f5f5f5;
+  background: #f0f7ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .supported-formats {
-  color: #999;
-  font-size: 12px;
+  color: #888;
+  font-size: 13px;
+  font-weight: 400;
 }
 
 .editor-content {
@@ -443,6 +454,7 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   height: calc(100vh - 200px);
+  overflow: hidden;
 }
 
 .table-area {
@@ -454,10 +466,12 @@ onUnmounted(() => {
   width: 400px;
   border-left: 1px solid #e0e0e0;
   background: #fafafa;
+  overflow: hidden;
 }
 
 .panel-tabs {
   height: 100%;
+  overflow: hidden;
 }
 
 .panel-tabs .el-tabs__content {
@@ -605,13 +619,38 @@ onUnmounted(() => {
   border: 1px solid #ffeaa7;
 }
 
+.icon {
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.back-button,
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.header-actions::-webkit-scrollbar {
+  display: none;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .empty-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-  
   .sheet-tabs {
     padding: 0 8px;
     overflow-x: auto;

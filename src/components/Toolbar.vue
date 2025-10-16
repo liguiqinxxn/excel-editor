@@ -289,18 +289,20 @@ const deleteColumn = () => {
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 8px 16px;
-  background: #f8f9fa;
+  gap: 12px;
+  padding: 6px 16px;
+  background: #ffffff;
   border-bottom: 1px solid #e0e0e0;
   flex-wrap: wrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
 }
 
 .toolbar-section {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px 0;
+  gap: 6px;
+  padding: 3px 0;
 }
 
 .toolbar-group {
@@ -326,58 +328,71 @@ const deleteColumn = () => {
   align-items: center;
   gap: 4px;
   padding: 6px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
   background: white;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   transition: all 0.2s;
   white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .toolbar-button:hover:not(:disabled) {
-  background: #e9ecef;
-  border-color: #adb5bd;
+  background: #f0f7ff;
+  border-color: #1976d2;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .toolbar-button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
+  background: #f5f5f5;
 }
 
 .toolbar-button.active {
   background: #1976d2;
   color: white;
   border-color: #1976d2;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
 }
 
 .toolbar-button.icon-only {
   padding: 6px;
-  min-width: 32px;
+  min-width: 36px;
   justify-content: center;
+  border-radius: 6px;
 }
 
 .icon {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
 }
 
 .toolbar-select {
   padding: 4px 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
   background: white;
   min-width: 80px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .color-picker {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
   cursor: pointer;
   padding: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .color-picker::-webkit-color-swatch {
