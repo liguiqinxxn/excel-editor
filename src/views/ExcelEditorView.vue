@@ -38,6 +38,9 @@
       </div>
     </div>
 
+    <!-- 历史工具栏 -->
+    <HistoryToolbar />
+    
     <!-- 使用新的工具栏组件 -->
     <Toolbar />
 
@@ -94,14 +97,38 @@
         </button>
       </div>
 
-      <!-- 使用新的表格组件 -->
-      <div class="table-area">
-        <ExcelTable 
-          v-if="activeWorksheet"
-          :data="activeWorksheet.data"
-          :dimensions="activeWorksheet.dimensions"
-          @cell-update="handleCellUpdate"
-        />
+      <!-- 主内容区域 -->
+      <div class="main-content">
+        <!-- 使用新的表格组件 -->
+        <div class="table-area">
+          <ExcelTable 
+            v-if="activeWorksheet"
+            :data="activeWorksheet.data"
+            :dimensions="activeWorksheet.dimensions"
+            @cell-update="handleCellUpdate"
+          />
+        </div>
+        
+        <!-- 侧边面板 -->
+        <div class="side-panels">
+          <el-tabs type="border-card" class="panel-tabs">
+            <el-tab-pane label="属性">
+              <PropertyPanel />
+            </el-tab-pane>
+            <el-tab-pane label="验证">
+              <ValidationPanel />
+            </el-tab-pane>
+            <el-tab-pane label="筛选">
+              <FilterPanel />
+            </el-tab-pane>
+            <el-tab-pane label="图表">
+              <ChartGenerator />
+            </el-tab-pane>
+            <el-tab-pane label="透视表">
+              <PivotTable />
+            </el-tab-pane>
+          </el-tabs>
+        </div>
       </div>
 
       <!-- 状态栏 -->
@@ -135,15 +162,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useExcelStore } from '@/stores/excel'
+import { useHistoryStore } from '@/stores/history'
 import Toolbar from '@/components/Toolbar.vue'
 import ExcelTable from '@/components/ExcelTable.vue'
+import HistoryToolbar from '@/components/HistoryToolbar.vue'
+import PropertyPanel from '@/components/PropertyPanel.vue'
+import ValidationPanel from '@/components/ValidationPanel.vue'
+import FilterPanel from '@/components/FilterPanel.vue'
+import ChartGenerator from '@/components/ChartGenerator.vue'
+import PivotTable from '@/components/PivotTable.vue'
 
 const router = useRouter()
 const fileInput = ref<HTMLInputElement>()
 const excelStore = useExcelStore()
+const historyStore = useHistoryStore()
 
 // 响应式数据
 const hasUnsavedChanges = ref(false)
@@ -227,6 +262,9 @@ const hasWorksheetChanges = (index: number): boolean => {
 
 const handleCellUpdate = (row: number, col: number, value: string) => {
   if (!activeWorksheet.value) return
+  
+  // 保存当前状态到历史记录
+  historyStore.saveState(activeWorksheet.value)
   
   excelStore.updateCellValue(row, col, value)
   hasUnsavedChanges.value = true
@@ -399,6 +437,33 @@ onUnmounted(() => {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  height: calc(100vh - 200px);
+}
+
+.table-area {
+  flex: 1;
+  overflow: auto;
+}
+
+.side-panels {
+  width: 400px;
+  border-left: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.panel-tabs {
+  height: 100%;
+}
+
+.panel-tabs .el-tabs__content {
+  padding: 0;
+  height: calc(100% - 40px);
+  overflow: auto;
 }
 
 .sheet-tabs {

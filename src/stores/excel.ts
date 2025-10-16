@@ -169,3 +169,9 @@ export const useExcelStore = defineStore('excel', () => {
     clearFile
   }
 })
+
+// 导出类型定义
+export type SheetData = WorksheetData
+export type ChartType = 'area' | 'line' | 'bar' | 'pie' | 'scatter'
+export type AggregationType = 'sum' | 'average' | 'count' | 'max' | 'min'
+export type ValidationType = 'number' | 'text' | 'date' | 'list' | 'custom'
