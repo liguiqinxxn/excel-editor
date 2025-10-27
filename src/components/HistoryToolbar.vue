@@ -72,13 +72,13 @@ watch(() => excelStore.activeWorksheet?.data, (newData, oldData) => {
 .history-toolbar {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 3px 10px;
+  gap: 4px;
+  padding: 2px 8px;
   background: #f8f9fa;
   border-bottom: 1px solid #e0e0e0;
-  min-height: 32px;
+  min-height: 28px;
   flex-wrap: nowrap;
-  overflow-x: auto;
+  overflow-x: hidden;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
@@ -92,9 +92,9 @@ watch(() => excelStore.activeWorksheet?.data, (newData, oldData) => {
 }
 
 .toolbar-icon {
-  width: 12px;
-  height: 12px;
-  font-size: 12px;
+  width: 10px;
+  height: 10px;
+  font-size: 10px;
 }
 
 .history-info {
@@ -104,15 +104,17 @@ watch(() => excelStore.activeWorksheet?.data, (newData, oldData) => {
   color: #666666;
   white-space: nowrap;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
 .history-info span {
-  padding: 2px 6px;
+  padding: 1px 4px;
   background: #ffffff;
-  border-radius: 3px;
+  border-radius: 2px;
   border: 1px solid #d0d0d0;
   font-weight: 500;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  font-size: 9px;
 }
 
 .el-button-group {
@@ -121,11 +123,13 @@ watch(() => excelStore.activeWorksheet?.data, (newData, oldData) => {
 }
 
 .el-button {
-  padding: 2px 6px;
-  font-size: 10px;
-  border-radius: 2px;
+  padding: 1px 4px;
+  font-size: 9px;
+  border-radius: 1px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   transition: all 0.15s;
+  min-height: 20px;
+  line-height: 1;
 }
 
 .el-button:hover:not(.is-disabled) {

@@ -89,11 +89,13 @@ const cellInput = ref<HTMLInputElement>()
 
 // 计算属性
 const visibleRows = computed(() => {
-  return Array.from({ length: Math.min(props.dimensions.rows, 50) }, (_, i) => i)
+  const rows = Math.max(props.dimensions.rows, 1)
+  return Array.from({ length: Math.min(rows, 50) }, (_, i) => i)
 })
 
 const visibleCols = computed(() => {
-  return Array.from({ length: Math.min(props.dimensions.cols, 26) }, (_, i) => i)
+  const cols = Math.max(props.dimensions.cols, 1)
+  return Array.from({ length: Math.min(cols, 26) }, (_, i) => i)
 })
 
 // 方法

@@ -39,7 +39,7 @@ export const useExcelStore = defineStore('excel', () => {
   // 状态
   const currentFile = ref<ExcelFile | null>(null)
   const isLoading = ref(false)
-  const error = ref<string | null>(null)
+  const error = ref<string>('')
 
   // 计算属性
   const activeWorksheet = computed(() => {
@@ -52,7 +52,7 @@ export const useExcelStore = defineStore('excel', () => {
   // 方法
   const loadExcelFile = async (file: File) => {
     isLoading.value = true
-    error.value = null
+    error.value = ''
 
     try {
       const arrayBuffer = await file.arrayBuffer()
@@ -71,15 +71,25 @@ export const useExcelStore = defineStore('excel', () => {
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
         
         const data: CellData[][] = jsonData.map((row: any) => 
-          Array.isArray(row) ? row.map(cell => ({ value: cell || '' })) : []
+          Array.isArray(row) ? row.map(cell => ({ value: cell !== undefined && cell !== null ? String(cell) : '' })) : []
         )
+
+        // 确保数据数组是矩形的
+        if (data.length > 0) {
+          const maxCols = Math.max(...data.map(row => row.length), 0)
+          data.forEach(row => {
+            while (row.length < maxCols) {
+              row.push({ value: '' })
+            }
+          })
+        }
 
         return {
           name: sheetName,
           data,
           dimensions: {
             rows: data.length,
-            cols: data.length > 0 ? Math.max(...data.map(row => row.length)) : 0
+            cols: data.length > 0 ? data[0].length : 0
           }
         }
       })
@@ -148,7 +158,55 @@ export const useExcelStore = defineStore('excel', () => {
 
   const clearFile = () => {
     currentFile.value = null
-    error.value = null
+    error.value = ''
+  }
+
+  const createNewFile = () => {
+    // 创建一个默认的10x10空白工作表
+    const defaultRows = 10
+    const defaultCols = 10
+    
+    const defaultData: CellData[][] = []
+    for (let i = 0; i < defaultRows; i++) {
+      const row: CellData[] = []
+      for (let j = 0; j < defaultCols; j++) {
+        row.push({ value: '' })
+      }
+      defaultData.push(row)
+    }
+    
+    currentFile.value = {
+      name: '新建文件.xlsx',
+      worksheets: [{
+        name: 'Sheet1',
+        data: defaultData,
+        dimensions: { rows: defaultRows, cols: defaultCols }
+      }],
+      activeSheetIndex: 0
+    }
+  }
+
+  const addWorksheet = () => {
+    if (!currentFile.value) return
+    
+    const newSheetName = `Sheet${currentFile.value.worksheets.length + 1}`
+    currentFile.value.worksheets.push({
+      name: newSheetName,
+      data: [],
+      dimensions: { rows: 0, cols: 0 }
+    })
+  }
+
+  const deleteWorksheet = (index: number) => {
+    if (!currentFile.value) return
+    if (currentFile.value.worksheets.length <= 1) return // 不能删除最后一个工作表
+    
+    currentFile.value.worksheets.splice(index, 1)
+    
+    // 调整活动工作表索引
+    if (currentFile.value.activeSheetIndex >= index) {
+      currentFile.value.activeSheetIndex = Math.max(0, currentFile.value.activeSheetIndex - 1)
+    }
   }
 
   return {
@@ -166,7 +224,10 @@ export const useExcelStore = defineStore('excel', () => {
     exportExcelFile,
     updateCellValue,
     switchWorksheet,
-    clearFile
+    clearFile,
+    createNewFile,
+    addWorksheet,
+    deleteWorksheet
   }
 })
 

@@ -211,18 +211,7 @@ const handleFileUpload = (event: Event) => {
 
 const createNewFile = () => {
   // 创建新的空白Excel文件
-  const blankWorksheet = {
-    name: 'Sheet1',
-    data: [[]],
-    dimensions: { rows: 1, cols: 1 }
-  }
-  
-  excelStore.currentFile = {
-    name: '新文件.xlsx',
-    worksheets: [blankWorksheet],
-    activeSheetIndex: 0
-  }
-  
+  excelStore.createNewFile()
   hasUnsavedChanges.value = true
 }
 
@@ -629,12 +618,72 @@ onUnmounted(() => {
   height: 16px;
 }
 
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 56px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
 .back-button,
 .action-button {
   display: flex;
   align-items: center;
   gap: 4px;
   white-space: nowrap;
+  padding: 6px 12px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.back-button:hover,
+.action-button:hover:not(:disabled) {
+  background: #f0f7ff;
+  border-color: #1976d2;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.action-button.primary {
+  background: #1976d2;
+  color: white;
+  border-color: #1976d2;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+}
+
+.action-button.primary:hover:not(:disabled) {
+  background: #1565c0;
+  border-color: #1565c0;
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+}
+
+.action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .header-actions {
@@ -647,6 +696,57 @@ onUnmounted(() => {
 
 .header-actions::-webkit-scrollbar {
   display: none;
+}
+
+.editor-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.file-name {
+  font-weight: 500;
+}
+
+.file-status {
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.file-status.modified {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.user-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f0f7ff;
+  border: 1px solid #1976d2;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.user-button:hover {
+  background: #1976d2;
+  color: white;
 }
 
 /* 响应式设计 */

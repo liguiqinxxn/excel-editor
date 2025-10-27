@@ -27,48 +27,58 @@
     <!-- 主要内容区域 -->
     <div class="main-content">
       <!-- 侧边栏 -->
-      <div class="sidebar">
-        <div class="sidebar-section">
-          <h3>文件管理</h3>
-          <nav class="sidebar-nav">
-            <a href="#" class="nav-item active">
-              <span class="icon">📊</span>
-              所有文件
-            </a>
-            <a href="#" class="nav-item">
-              <span class="icon">⭐</span>
-              收藏夹
-            </a>
-            <a href="#" class="nav-item">
-              <span class="icon">🕒</span>
-              最近使用
-            </a>
-            <a href="#" class="nav-item">
-              <span class="icon">🗑️</span>
-              回收站
-            </a>
-          </nav>
-        </div>
+      <div class="sidebar" :class="{ collapsed: isSidebarCollapsed }">
+        <button 
+          class="sidebar-toggle" 
+          @click="toggleSidebar"
+          :title="isSidebarCollapsed ? '展开侧边栏' : '折叠侧边栏'"
+        >
+          <span class="icon">{{ isSidebarCollapsed ? '▶' : '◀' }}</span>
+        </button>
+        
+        <div v-show="!isSidebarCollapsed" class="sidebar-content">
+          <div class="sidebar-section">
+            <h3>文件管理</h3>
+            <nav class="sidebar-nav">
+              <a href="#" class="nav-item active">
+                <span class="icon">📊</span>
+                所有文件
+              </a>
+              <a href="#" class="nav-item">
+                <span class="icon">⭐</span>
+                收藏夹
+              </a>
+              <a href="#" class="nav-item">
+                <span class="icon">🕒</span>
+                最近使用
+              </a>
+              <a href="#" class="nav-item">
+                <span class="icon">🗑️</span>
+                回收站
+              </a>
+            </nav>
+          </div>
 
-        <div class="sidebar-section">
-          <h3>分类</h3>
-          <div class="category-list">
-            <div class="category-item" v-for="category in categories" :key="category.id">
-              <span class="category-color" :style="{ backgroundColor: category.color }"></span>
-              {{ category.name }}
+          <div class="sidebar-section">
+            <h3>分类</h3>
+            <div class="category-list">
+              <div class="category-item" v-for="category in categories" :key="category.id">
+                <span class="category-color" :style="{ backgroundColor: category.color }"></span>
+                {{ category.name }}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="sidebar-section">
-          <h3>存储空间</h3>
-          <div class="storage-info">
-            <div class="storage-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" :style="{ width: storageUsage + '%' }"></div>
-              </div>
-              <div class="storage-text">
-                已使用 {{ storageUsed }} / {{ storageTotal }}
+          <div class="sidebar-section">
+            <h3>存储空间</h3>
+            <div class="storage-info">
+              <div class="storage-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" :style="{ width: storageUsage + '%' }"></div>
+                </div>
+                <div class="storage-text">
+                  已使用 {{ storageUsed }} / {{ storageTotal }}
+                </div>
               </div>
             </div>
           </div>
@@ -182,6 +192,8 @@ const searchQuery = ref('')
 const sortBy = ref('date')
 const viewMode = ref('grid')
 const fileInput = ref<HTMLInputElement>()
+const isSidebarCollapsed = ref(false)
+const windowWidth = ref(window.innerWidth)
 
 // 文件数据
 const files = ref([
@@ -315,17 +327,34 @@ const formatDate = (date: Date): string => {
   return date.toLocaleDateString('zh-CN')
 }
 
+// 方法
+const toggleSidebar = () => {
+  isSidebarCollapsed.value = !isSidebarCollapsed.value
+}
+
 // 事件监听
 const hideContextMenu = () => {
   contextMenu.value.visible = false
 }
 
+const handleResize = () => {
+  windowWidth.value = window.innerWidth
+  // 在小屏幕上自动折叠侧边栏
+  if (windowWidth.value < 768) {
+    isSidebarCollapsed.value = true
+  }
+}
+
 onMounted(() => {
   document.addEventListener('click', hideContextMenu)
+  window.addEventListener('resize', handleResize)
+  // 初始化时检查屏幕宽度
+  handleResize()
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', hideContextMenu)
+  window.removeEventListener('resize', handleResize)
 })
 </script>
 
@@ -393,6 +422,34 @@ onUnmounted(() => {
   border-right: 1px solid #e0e0e0;
   padding: 24px;
   overflow-y: auto;
+  position: relative;
+  transition: width 0.3s ease;
+}
+
+.sidebar.collapsed {
+  width: 40px;
+  padding: 24px 8px;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 16px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.sidebar-toggle:hover {
+  background: #f0f0f0;
+}
+
+.sidebar-content {
+  margin-right: 20px;
 }
 
 .sidebar-section {
@@ -682,7 +739,24 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .sidebar {
-    display: none;
+    width: 240px;
+  }
+  
+  .file-list.grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  .sidebar.collapsed {
+    width: 0;
+    padding: 24px 0;
+    border-right: none;
+  }
+  
+  .sidebar-toggle {
+    position: relative;
+    top: 0;
+    right: 0;
+    display: block;
   }
   
   .file-controls {
